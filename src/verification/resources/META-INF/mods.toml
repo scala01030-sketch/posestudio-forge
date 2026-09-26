@@ -1,0 +1,7 @@
+modLoader="javafml"
+loaderVersion="[47,48)"
+license="MIT"
+[[mods]]
+modId="posefixtures"
+version="1.0"
+displayName="Pose Studio acceptance fixtures (test only)"

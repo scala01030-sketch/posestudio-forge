@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "studio.pose.verification.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "posefixtures.refmap.json",
+  "client": ["TestSkinMixin", "KeyboardAccess"],
+  "injectors": {"defaultRequire":1}
+}

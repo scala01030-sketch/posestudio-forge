@@ -1,0 +1,33 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "studio.pose.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "posestudio.refmap.json",
+  "mixins": [
+    "ServerLevelMixin",
+    "MobMixin",
+    "ServerConnectionMixin"
+  ],
+  "client": [
+    "ModelPartAccess",
+    "QuadrupedAccess",
+    "ModelPartMixin",
+    "SkinLayersMeshMixin",
+    "EmfAnimationMixin",
+    "PhysicsStudioMixin",
+    "EmfMeshMixin",
+    "PlayerHandMixin",
+    "DispatcherMixin",
+    "CameraMixin",
+    "LocalPlayerMixin",
+    "MouseMixin",
+    "MinecraftInputMixin",
+    "GameRendererMixin",
+    "ClientLevelMixin",
+    "KeyboardHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

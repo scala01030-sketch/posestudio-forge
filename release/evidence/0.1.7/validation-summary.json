@@ -1,0 +1,84 @@
+{
+  "version": "0.1.7",
+  "date": "2026-09-27",
+  "instance": "E:\\minecrate\\.minecraft\\versions\\1.20.1-Forge_47.4.22 Vanilla-tacz",
+  "officialJarSha256": "3727E4DBB4A64C3FE8D0339C829B7E815DD08FD384F7F3049754C72E7AA59BCF",
+  "optionsSha256": "258C17417A137654FC24F402E1EA8C86FB4BDB509284EFB7517CC0AA52477E77",
+  "unitTests": {
+    "status": "PASS",
+    "checks": 12
+  },
+  "languageParity": {
+    "status": "PASS",
+    "keys": 132
+  },
+  "gameRuns": {
+    "core": {
+      "status": "PASS",
+      "checks": 116,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260927-043357-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    },
+    "final": {
+      "status": "PASS",
+      "checks": 146,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260927-042933-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    },
+    "entry": {
+      "status": "PASS",
+      "checks": 128,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260927-043507-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    },
+    "diverse": {
+      "status": "PASS",
+      "checks": 100,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260927-043550-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    }
+  },
+  "onlyOneOfficialJar": true,
+  "fixtureRemoved": true,
+  "temporarySkinPackRemoved": true,
+  "authentication": "Offline StudioTest using the actual PCL Forge profile; no real account or PCL GUI login",
+  "resourcePacks": [
+    "tacz_resources",
+    "vanilla",
+    "mod_resources",
+    "fabric",
+    "programmer_art",
+    "file/FA+All_Extensions-v1.8.1.zip",
+    "file/FreshAnimations_v1.10.4.zip",
+    "file/FA+Player-v1.1.zip",
+    "file/§lCleanGlass_v2.zip",
+    "continuity:default",
+    "continuity:glass_pane_culling_fix"
+  ],
+  "untested": [
+    "Dedicated multiplayer server",
+    "Other packs or shaders",
+    "All registered mod entity types",
+    "Long-duration multiplayer load"
+  ],
+  "closedOut": true,
+  "budgets": {
+    "livingDefault": 8,
+    "livingRange": [
+      5,
+      10
+    ],
+    "propDefault": 25,
+    "propRange": [
+      20,
+      30
+    ],
+    "batchMaximum": 40
+  },
+  "githubTarget": "https://github.com/scala01030-sketch/posestudio-forge",
+  "sourceZipSha256": "07DA6A4910324CE668BA2C7B6A10B1DDADF12C58C9639D46BF9D0673C1E1050B"
+}

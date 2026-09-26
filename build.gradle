@@ -1,0 +1,80 @@
+plugins {
+    id 'java'
+    id 'net.minecraftforge.gradle' version '6.0.54'
+}
+version = '0.1.7'
+group = 'studio.pose'
+base { archivesName = 'posestudio' }
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+sourceSets {
+    verification {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+    }
+}
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    copyIdeResources = true
+    runs {
+        configureEach {
+            workingDirectory project.file('run')
+            args '--mixin', 'posestudio.mixins.json'
+            property 'forge.logging.console.level', 'info'
+            property 'java.io.tmpdir', project.file('.toolchain/temp').absolutePath
+            property 'user.home', project.file('.toolchain/user-home').absolutePath
+            mods { posestudio { source sourceSets.main } }
+        }
+        client {
+            if (project.hasProperty('acceptance')) {
+                workingDirectory project.file('build/acceptance-run')
+                property 'posestudio.acceptance', 'true'
+                args '--mixin', 'posefixtures.mixins.json'
+                args '--width', '1280', '--height', '720'
+                mods { posefixtures { source sourceSets.verification } }
+            }
+        }
+        server { args '--nogui' }
+    }
+}
+repositories { mavenCentral() }
+configurations.verificationAnnotationProcessor.extendsFrom(configurations.annotationProcessor)
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.4.10'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5'
+    annotationProcessor 'com.google.code.gson:gson:2.10'
+    annotationProcessor 'com.google.guava:guava:31.1-jre'
+    annotationProcessor 'org.ow2.asm:asm-tree:9.8'
+    annotationProcessor 'org.ow2.asm:asm-util:9.8'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+tasks.named('compileJava', JavaCompile) {
+    dependsOn 'createMcpToSrg'
+    options.compilerArgs += ["-AreobfTsrgFile=${layout.buildDirectory.get()}/createMcpToSrg/output.tsrg".toString(),
+        "-AoutRefMapFile=${layout.buildDirectory.get()}/generated/posestudio.refmap.json".toString(),
+        "-AoutTsrgFile=${layout.buildDirectory.get()}/generated/posestudio-mixin.tsrg".toString(), '-AmappingTypes=tsrg']
+}
+tasks.named('jar', Jar) {
+    from(layout.buildDirectory.file('generated/posestudio.refmap.json'))
+    manifest.attributes('MixinConfigs': 'posestudio.mixins.json')
+    finalizedBy 'reobfJar'
+}
+tasks.named('compileVerificationJava', JavaCompile) {
+    dependsOn 'createMcpToSrg'
+    options.compilerArgs += ["-AreobfTsrgFile=${layout.buildDirectory.get()}/createMcpToSrg/output.tsrg".toString(),
+        "-AoutRefMapFile=${layout.buildDirectory.get()}/generated/posefixtures.refmap.json".toString(),
+        "-AoutTsrgFile=${layout.buildDirectory.get()}/generated/posefixtures-mixin.tsrg".toString(), '-AmappingTypes=tsrg']
+}
+tasks.named('test', Test) { useJUnitPlatform() }
+tasks.register('verificationJar', Jar) {
+    archiveClassifier = 'verification-fixtures'
+    from sourceSets.verification.output
+    from(layout.buildDirectory.file('generated/posefixtures.refmap.json'))
+    manifest.attributes('MixinConfigs': 'posefixtures.mixins.json')
+}
+reobf { verificationJar {} }
+tasks.configureEach {
+    if (name == 'reobfJar') extraMappings.from(layout.buildDirectory.file('generated/posestudio-mixin.tsrg'))
+    if (name == 'reobfVerificationJar') extraMappings.from(layout.buildDirectory.file('generated/posefixtures-mixin.tsrg'))
+}

@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[47,48)"
+license="MIT"
+[[mods]]
+modId="posestudio"
+version="0.1.7"
+displayName="Pose Studio"
+authors="Pose Studio contributors"
+description='''Static in-world pose editing, continuous player joints and a detached camera. No animation timeline.'''
+[[dependencies.posestudio]]
+modId="forge"
+mandatory=true
+versionRange="[47.4.10,48)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.posestudio]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.20.2)"
+ordering="NONE"
+side="BOTH"
