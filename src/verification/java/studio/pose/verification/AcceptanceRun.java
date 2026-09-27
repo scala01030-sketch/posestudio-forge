@@ -107,6 +107,10 @@ public final class AcceptanceRun {
                 case 5 -> {
                     if(ticks<25) return;
                     var a=s.actor();
+                    StudioOverlay.Point headPoint=StudioOverlay.jointPoint("head"),bodyPoint=StudioOverlay.jointPoint("body");
+                    check(headPoint!=null && bodyPoint!=null && Math.hypot(headPoint.x()-bodyPoint.x(),headPoint.y()-bodyPoint.y())>12,"Head and torso handles are separate usable targets in the actual player viewport");
+                    check(StudioOverlay.click(bodyPoint.x(),bodyPoint.y()) && s.bone.equals("body"),"Mouse picks torso center without selecting head");
+                    check(StudioOverlay.click(headPoint.x(),headPoint.y()) && s.bone.equals("head"),"Mouse picks face center without selecting torso");
                     System.out.println("POSE_ACCEPTANCE player render diagnostics: bones="+a.bones.keySet()+" nodes="+a.nodes.keySet()+" bentVertices="+a.bentVertices+" adapter="+a.adapterStatus.getString());
                     var adapter=studio.pose.model.RenderContext.inspect(mc.player,a);
                     if(Boolean.getBoolean("posestudio.acceptance.exact") && mc.options.resourcePacks.contains("file/FA+Player-v1.1.zip")) check(adapter.bindings.keySet().stream().anyMatch(p->p.getClass().getName().contains("EMFModelPartCustom")),"Actual CEM child geometry is loaded, not a vanilla replacement");

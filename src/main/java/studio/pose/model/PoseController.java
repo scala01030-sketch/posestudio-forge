@@ -48,7 +48,13 @@ public final class PoseController {
             double error=0;for(int i=0;i<16;i++) error=Math.max(error,Math.abs(first[i]-second[i]));
             a.skinTransformErrors.merge(b.name(),error,Math::max);
         }
-        a.nodes.putIfAbsent(b.name(),new ActorState.Node(b.name(),b.parent(),new Matrix4f(stack.last().pose())));
+        Matrix4f partMatrix=new Matrix4f(stack.last().pose()),handleMatrix=partMatrix;
+        // Human head/torso handles sit on the face center and torso center; model pivots stay intact.
+        if(frame.adapter().humanoid) {
+            if(b.name().equals("head")) handleMatrix=new Matrix4f(partMatrix).translate(0,-4f/16,-4f/16);
+            else if(b.name().equals("body")) handleMatrix=new Matrix4f(partMatrix).translate(0,6f/16,0);
+        }
+        a.nodes.putIfAbsent(b.name(),new ActorState.Node(b.name(),b.parent(),partMatrix,handleMatrix));
         if(b.playerLimb()) {
             String joint=joint(b.name()); if(joint==null) return;
             boolean arm=b.name().endsWith("arm"); float y=arm?4:6;

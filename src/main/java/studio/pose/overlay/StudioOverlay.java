@@ -49,11 +49,11 @@ public final class StudioOverlay {
         return new Point((v.x/v.w*.5+.5)*width,(.5-v.y/v.w*.5)*height);
     }
     private static Point projectWorld(Vec3 v) { return project(view,new Vector3f((float)(v.x-camera.x),(float)(v.y-camera.y),(float)(v.z-camera.z))); }
-    private static Point node(ActorState.Node n) { return project(n.matrix(),new Vector3f()); }
+    private static Point node(ActorState.Node n) { return project(n.handleMatrix(),new Vector3f()); }
     public static Point rotationHandle(int axis,double angle) {
         ActorState a=StudioState.INSTANCE.actor();if(a==null) return null;
         ActorState.Node n=a.nodes.get(StudioState.INSTANCE.bone);
-        return n==null?null:project(n.matrix(),ring(axis,angle));
+        return n==null?null:project(n.handleMatrix(),ring(axis,angle));
     }
     public static void draw(GuiGraphics g,int w,int h,int left,int right) {
         width=w;height=h;rings.clear();
@@ -75,7 +75,7 @@ public final class StudioOverlay {
                 int x=(int)p.x,y=(int)p.y;boolean chosen=n.name().equals(s.bone);
                 g.fill(x-3,y-3,x+4,y+4,chosen?0xffffcc55:0xffeef6ff);
             }
-            ActorState.Node n=a.nodes.get(s.bone);if(n!=null) drawRings(g,n.matrix());
+            ActorState.Node n=a.nodes.get(s.bone);if(n!=null) drawRings(g,n.handleMatrix());
         }
         if(entity!=null && a.frozen && s.mode==StudioState.Mode.ACTOR && s.actorRotate) drawRings(g,actorRingMatrix(),s.actorRotationAxis);
         if(entity!=null && a.frozen && s.mode==StudioState.Mode.ACTOR && !s.actorRotate) {
@@ -129,7 +129,7 @@ public final class StudioOverlay {
             for(RingSegment segment:rings) { double d=distance(cursor,segment.a,segment.b);if(d<nearest) { nearest=d;hit=segment; } }
             ActorState.Node selected=a.nodes.get(s.bone);
             if(hit!=null && selected!=null) {
-                dragMatrix=new Matrix4f(selected.matrix());dragging=hit.axis;lastAngle=planeAngle(x,y,dragMatrix,dragging);
+                dragMatrix=new Matrix4f(selected.handleMatrix());dragging=hit.axis;lastAngle=planeAngle(x,y,dragMatrix,dragging);
                 lastCursor=cursor;dragUndo=s.undo.poseSnapshot(a);dragChanged=false;
                 return true;
             }

@@ -18,6 +18,8 @@ public final class ActorState {
     public final Map<String,org.joml.Vector3f> boneScales=new LinkedHashMap<>();
     public final Map<String,Double> skinTransformErrors=new LinkedHashMap<>();
     public boolean adapterReady; public net.minecraft.network.chat.Component adapterStatus=net.minecraft.network.chat.Component.translatable("posestudio.adapter.not_frozen");
-    public record Node(String name,String parent,Matrix4f matrix) {}
+    public record Node(String name,String parent,Matrix4f matrix,Matrix4f handleMatrix) {
+        public Node(String name,String parent,Matrix4f matrix) {this(name,parent,matrix,matrix);}
+    }
     public ActorState(UUID id,ActorTransform transform) { this.id=id; this.transform=transform; }
 }

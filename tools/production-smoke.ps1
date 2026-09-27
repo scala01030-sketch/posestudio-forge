@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$VersionJson,[Parameter(Mandatory=$true)][string]$MinecraftRoot,[ValidateSet('en_us','zh_cn')][string]$Language='en_us',[string]$CompatibilityInstance,[string]$ModVersion='0.1.8',[switch]$FullPack,[ValidateSet('default','slim')][string]$Skin='default',[switch]$ExactSettings,[switch]$InPlace,[string]$EvidencePath,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest)
+param([Parameter(Mandatory=$true)][string]$VersionJson,[Parameter(Mandatory=$true)][string]$MinecraftRoot,[ValidateSet('en_us','zh_cn')][string]$Language='en_us',[string]$CompatibilityInstance,[string]$ModVersion='0.1.9',[switch]$FullPack,[ValidateSet('default','slim')][string]$Skin='default',[switch]$ExactSettings,[switch]$InPlace,[string]$EvidencePath,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest)
 $ErrorActionPreference='Stop'
 $projectRoot=Split-Path -Parent $PSScriptRoot
 $runRoot=Join-Path $projectRoot ('build\production-run-'+$ModVersion+'-'+$Language)

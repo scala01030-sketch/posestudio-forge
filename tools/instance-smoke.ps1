@@ -1,4 +1,4 @@
-param([string]$ModVersion='0.1.8',[ValidateSet('default','slim')][string]$Skin='default',[switch]$UserSkin,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest)
+param([string]$ModVersion='0.1.9',[ValidateSet('default','slim')][string]$Skin='default',[switch]$UserSkin,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest)
 $ErrorActionPreference='Stop'
 $projectRoot='E:\PoseStudio'
 $env:TEMP=Join-Path $projectRoot '.toolchain\temp';$env:TMP=$env:TEMP

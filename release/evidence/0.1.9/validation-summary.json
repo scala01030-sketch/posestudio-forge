@@ -1,0 +1,17 @@
+{
+  "version": "0.1.9",
+  "officialJarSha256": "0CE32F9307F161A84F71461A0B04A00A21392245BDF43550BAEA3D12E2B1E561",
+  "sourceZipSha256": "C641E68E9BC19A1E01408F9EEA67409F4DF5C075DDA708CB8E4FB0CBBA4B0461",
+  "instance": "E:\\minecrate\\.minecraft\\versions\\1.20.1-Forge_47.4.22 Vanilla-tacz",
+  "scope": "Head and torso display/picking/gizmo anchors only",
+  "gameRuns": {
+    "core": {
+      "status": "PASS",
+      "checks": 119
+    }
+  },
+  "unitTests": 12,
+  "originalSettingsRestored": true,
+  "fixtureRemoved": true,
+  "previousCompatibilityMatrix": "0.1.8; not fully rerun for this display-only patch"
+}
