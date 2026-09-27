@@ -15,7 +15,7 @@ import studio.pose.server.FreezeService;
 
 public final class StudioNetwork {
     public static final int BEGIN=0, END=1, FREEZE=2, RELEASE=3, MOVE=4, PLACE=5, REMOVE=6;
-    private static final String VERSION="4";
+    private static final String VERSION="5";
     public static final SimpleChannel CHANNEL=NetworkRegistry.newSimpleChannel(new ResourceLocation(PoseStudio.ID,"studio"),()->VERSION,VERSION::equals,VERSION::equals);
     public record Request(int action, UUID actor, ActorTransform transform) {
         static void encode(Request r,FriendlyByteBuf b) { b.writeVarInt(r.action); b.writeUUID(r.actor); ActorTransform t=r.transform; b.writeDouble(t.x());b.writeDouble(t.y());b.writeDouble(t.z());b.writeFloat(t.yaw());b.writeFloat(t.pitch());b.writeFloat(t.roll()); }
@@ -34,6 +34,7 @@ public final class StudioNetwork {
                 };
                 ActorTransform authoritative=FreezeService.transform(p,r.actor);
                 CHANNEL.send(PacketDistributor.PLAYER.with(()->p),new Reply(r.action,r.actor,authoritative==null?r.transform:authoritative,error));
+                if(r.action==FREEZE || r.action==RELEASE || r.action==REMOVE) syncProps(p);
             }); c.setPacketHandled(true);
         }
     }
@@ -44,18 +45,26 @@ public final class StudioNetwork {
             var c=s.get(); c.enqueueWork(()->DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->studio.pose.client.StudioState.INSTANCE.reply(r))); c.setPacketHandled(true);
         }
     }
-    public record PlaceRequest(ResourceLocation type, ActorTransform transform) {
-        static void encode(PlaceRequest r,FriendlyByteBuf b) { b.writeResourceLocation(r.type);Request.encode(new Request(PLACE,new UUID(0,0),r.transform),b); }
-        static PlaceRequest decode(FriendlyByteBuf b) { var type=b.readResourceLocation();return new PlaceRequest(type,Request.decode(b).transform); }
+    public record PlaceRequest(studio.pose.data.PlacementSpec source, ActorTransform transform) {
+        static void encode(PlaceRequest r,FriendlyByteBuf b) {
+            b.writeEnum(r.source.kind());b.writeResourceLocation(r.source.type());b.writeUUID(r.source.source());b.writeNbt(r.source.stack().save(new net.minecraft.nbt.CompoundTag()));
+            Request.encode(new Request(PLACE,new UUID(0,0),r.transform),b);
+        }
+        static PlaceRequest decode(FriendlyByteBuf b) {
+            var kind=b.readEnum(studio.pose.data.PlacementSpec.Kind.class);var type=b.readResourceLocation();var source=b.readUUID();var tag=b.readNbt();var stack=tag==null?net.minecraft.world.item.ItemStack.EMPTY:net.minecraft.world.item.ItemStack.of(tag);
+            return new PlaceRequest(new studio.pose.data.PlacementSpec(kind,type,stack,source),Request.decode(b).transform);
+        }
         static void handle(PlaceRequest r,Supplier<NetworkEvent.Context> supplier) {
             var context=supplier.get();context.enqueueWork(()-> {
                 var p=context.getSender();if(p==null) return;
-                var result=FreezeService.place(p,r.type,r.transform);
+                var result=FreezeService.place(p,r.source,r.transform);
                 CHANNEL.send(PacketDistributor.PLAYER.with(()->p),new Reply(PLACE,result.actor(),r.transform,result.error()));
+                syncProps(p);
             });context.setPacketHandled(true);
         }
     }
-    public static void place(ResourceLocation type,ActorTransform transform) { CHANNEL.sendToServer(new PlaceRequest(type,transform)); }
+    public static void place(ResourceLocation type,ActorTransform transform) {place(studio.pose.data.PlacementSpec.entity(type),transform);}
+    public static void place(studio.pose.data.PlacementSpec source,ActorTransform transform) { CHANNEL.sendToServer(new PlaceRequest(source,transform)); }
     public record Entry(UUID actor,ActorTransform transform) {}
     private static void entries(java.util.List<Entry> entries,FriendlyByteBuf b) {
         b.writeVarInt(entries.size());for(var entry:entries) Request.encode(new Request(MOVE,entry.actor,entry.transform),b);
@@ -73,6 +82,7 @@ public final class StudioNetwork {
                 var authoritative=new java.util.ArrayList<Entry>();
                 if(error.isEmpty()) for(var entry:r.actors) authoritative.add(new Entry(entry.actor,FreezeService.transform(p,entry.actor)));
                 CHANNEL.send(PacketDistributor.PLAYER.with(()->p),new BatchReply(r.enter,authoritative,error));
+                if(r.enter && error.isEmpty()) syncProps(p);
             });c.setPacketHandled(true);
         }
     }
@@ -82,7 +92,14 @@ public final class StudioNetwork {
         static void handle(BatchReply r,Supplier<NetworkEvent.Context> supplier) {var c=supplier.get();c.enqueueWork(()->DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->studio.pose.client.StudioState.INSTANCE.batchReply(r)));c.setPacketHandled(true);}
     }
     public static void batch(boolean enter,java.util.List<Entry> actors) {CHANNEL.sendToServer(new BatchRequest(enter,java.util.List.copyOf(actors)));}
+    public record ScenePropsReply(java.util.List<Entry> actors) {
+        static void encode(ScenePropsReply r,FriendlyByteBuf b) {entries(r.actors,b);}
+        static ScenePropsReply decode(FriendlyByteBuf b) {return new ScenePropsReply(entries(b));}
+        static void handle(ScenePropsReply r,Supplier<NetworkEvent.Context> supplier) {var c=supplier.get();c.enqueueWork(()->DistExecutor.unsafeRunWhenOn(Dist.CLIENT,()->()->studio.pose.client.StudioState.INSTANCE.sceneProps(r.actors)));c.setPacketHandled(true);}
+    }
+    private static void syncProps(ServerPlayer player) {CHANNEL.send(PacketDistributor.PLAYER.with(()->player),new ScenePropsReply(FreezeService.placedEntries(player)));}
     public static void register() {
+        CHANNEL.messageBuilder(ScenePropsReply.class,5,NetworkDirection.PLAY_TO_CLIENT).encoder(ScenePropsReply::encode).decoder(ScenePropsReply::decode).consumerMainThread(ScenePropsReply::handle).add();
         CHANNEL.messageBuilder(BatchRequest.class,3,NetworkDirection.PLAY_TO_SERVER).encoder(BatchRequest::encode).decoder(BatchRequest::decode).consumerMainThread(BatchRequest::handle).add();
         CHANNEL.messageBuilder(BatchReply.class,4,NetworkDirection.PLAY_TO_CLIENT).encoder(BatchReply::encode).decoder(BatchReply::decode).consumerMainThread(BatchReply::handle).add();
         CHANNEL.messageBuilder(PlaceRequest.class,2,NetworkDirection.PLAY_TO_SERVER).encoder(PlaceRequest::encode).decoder(PlaceRequest::decode).consumerMainThread(PlaceRequest::handle).add();

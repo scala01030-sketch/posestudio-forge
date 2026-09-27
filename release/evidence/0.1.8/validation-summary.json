@@ -1,0 +1,142 @@
+{
+  "version": "0.1.8",
+  "date": "2026-09-28",
+  "instance": "E:\\minecrate\\.minecraft\\versions\\1.20.1-Forge_47.4.22 Vanilla-tacz",
+  "officialJarSha256": "F1095560F560287BEAE0340F50D02757AD902E1A78660A584EEFA74B0D186671",
+  "optionsSha256": "D46A83C34E782DAE8FBF01B713C3A22AF03E643FAF828E5D847AF68DB87566B0",
+  "unitTests": {
+    "status": "PASS",
+    "checks": 12
+  },
+  "languageParity": {
+    "status": "PASS",
+    "keys": 141
+  },
+  "gameRuns": {
+    "items": {
+      "status": "PASS",
+      "checks": 94,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260928-035413-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    },
+    "core": {
+      "status": "PASS",
+      "checks": 116,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260928-035920-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    },
+    "final": {
+      "status": "PASS",
+      "checks": 146,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260928-035535-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    },
+    "entry": {
+      "status": "PASS",
+      "checks": 128,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260928-040029-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    },
+    "diverse": {
+      "status": "PASS",
+      "checks": 100,
+      "instanceBackup": "E:\\PoseStudio\\build\\instance-check-20260928-040113-default",
+      "optionsRestored": true,
+      "originalConfigFilesRestored": true
+    }
+  },
+  "onlyOneOfficialJar": true,
+  "fixtureRemoved": true,
+  "temporarySkinPackRemoved": true,
+  "authentication": "Offline StudioTest using the actual PCL Forge profile; no real account or PCL GUI login",
+  "resourcePacks": [
+    "tacz_resources",
+    "vanilla",
+    "mod_resources",
+    "fabric",
+    "programmer_art",
+    "file/FA+All_Extensions-v1.8.1.zip",
+    "file/FreshAnimations_v1.10.4.zip",
+    "file/FA+Player-v1.1.zip",
+    "file/§lCleanGlass_v2.zip",
+    "continuity:default",
+    "continuity:glass_pane_culling_fix"
+  ],
+  "untested": [
+    "Dedicated multiplayer server",
+    "Other packs or shaders",
+    "All registered mod entity types",
+    "Long-duration multiplayer load"
+  ],
+  "closedOut": true,
+  "budgets": {
+    "livingDefault": 8,
+    "livingRange": [
+      5,
+      10
+    ],
+    "propDefault": 25,
+    "propRange": [
+      20,
+      30
+    ],
+    "batchMaximum": 40
+  },
+  "githubTarget": "https://github.com/scala01030-sketch/posestudio-forge",
+  "catalog": {
+    "registeredNonAirItems": 1271,
+    "nativeStackVariants": 1920,
+    "entityRegistryCoverage": "PASS",
+    "gunVariantSearch": "PASS"
+  },
+  "equipment": {
+    "separation": "PASS",
+    "neutralHumanoidPose": "PASS",
+    "restore": "PASS",
+    "npcEquipmentSync": "PASS",
+    "atomicBudgetRejection": "PASS",
+    "simulatedRecovery": "PASS"
+  },
+  "modelCompatibility": {
+    "loadedVersions": {
+      "skinlayers3d": "1.11.2",
+      "entity_model_features": "3.2.4",
+      "entity_texture_features": "7.1",
+      "physicsmod": "3.0.20",
+      "tacz": "1.1.8-hotfix",
+      "tacztweaks": "2.14.2",
+      "carryon": "2.1.2.7",
+      "wildfire_gender": "1.20.1-3.0.1",
+      "femaleplasticsurgery": "1.0.0",
+      "customskinloader": "15.0.1",
+      "simplebedrockmodel": "2.2.2-forge+mc1.20.1",
+      "oculus": "1.8.0",
+      "embeddium": "0.3.31+mc1.20.1",
+      "entityculling": "1.10.5",
+      "lrtactical": "0.4.3",
+      "taczaddon": "1.1.8.2",
+      "taczdd": "0.1.1",
+      "lradd": "0.3.0",
+      "betterbloodoverlay_1_20_1": "2.2.0",
+      "aaa_particles": "2.2.3"
+    },
+    "ordinaryCombinedRendering": "PASS",
+    "doubleSkinAndJoints": "PASS",
+    "crawlOrSwimmingRoot": "PASS",
+    "activeCarryOnArms": "PASS",
+    "activeWildfireBodyLayer": "PASS",
+    "wildfirePhysicsAndIdleFreeze": "PASS",
+    "notVerified": [
+      "Online skin providers",
+      "Dedicated Bedrock custom models",
+      "All FemalePlasticSurgery parameter extremes",
+      "Every blood or particle effect",
+      "CarryOn special carried object conversion"
+    ]
+  },
+  "sourceZipSha256": "CE5A579D72102B80C848A3962732140CDF7180193ED95F51CE387BB34D53BB44"
+}

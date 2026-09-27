@@ -8,6 +8,6 @@ import studio.pose.server.FreezeService;
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerConnectionMixin {
     @Shadow public ServerPlayer player;
-    @Inject(method={"handleMovePlayer","handlePlayerInput","handlePlayerAction","handleUseItem","handleUseItemOn","handleInteract"},at=@At("HEAD"),cancellable=true)
+    @Inject(method={"handleMovePlayer","handlePlayerInput","handlePlayerAction","handleUseItem","handleUseItemOn","handleInteract","handleSetCarriedItem","handleContainerClick","handleSetCreativeModeSlot"},at=@At("HEAD"),cancellable=true)
     private void pose$stopInput(CallbackInfo ci) { if(player.server.isSameThread() && FreezeService.frozen(player)) ci.cancel(); }
 }

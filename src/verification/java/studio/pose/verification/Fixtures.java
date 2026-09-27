@@ -20,6 +20,6 @@ public final class Fixtures {
         var bus=FMLJavaModLoadingContext.get().getModEventBus();TYPES.register(bus);
         bus.addListener((EntityAttributeCreationEvent e)->e.put(PIG.get(),Pig.createAttributes().build()));
         bus.addListener((EntityRenderersEvent.RegisterRenderers e)->e.registerEntityRenderer(PIG.get(),FixtureRenderer::new));
-        MinecraftForge.EVENT_BUS.register(Boolean.getBoolean("posestudio.acceptance.usability")?new UsabilityRun():Boolean.getBoolean("posestudio.acceptance.entry")?new EntryMoveRun():Boolean.getBoolean("posestudio.acceptance.diverse")?new DiverseModelsRun():new AcceptanceRun());
+        MinecraftForge.EVENT_BUS.register(Boolean.getBoolean("posestudio.acceptance.items")?new ItemCatalogRun():Boolean.getBoolean("posestudio.acceptance.usability")?new UsabilityRun():Boolean.getBoolean("posestudio.acceptance.entry")?new EntryMoveRun():Boolean.getBoolean("posestudio.acceptance.diverse")?new DiverseModelsRun():new AcceptanceRun());
     }
 }

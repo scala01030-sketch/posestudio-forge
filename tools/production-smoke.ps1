@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$VersionJson,[Parameter(Mandatory=$true)][string]$MinecraftRoot,[ValidateSet('en_us','zh_cn')][string]$Language='en_us',[string]$CompatibilityInstance,[string]$ModVersion='0.1.7',[switch]$FullPack,[ValidateSet('default','slim')][string]$Skin='default',[switch]$ExactSettings,[switch]$InPlace,[string]$EvidencePath,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest)
+param([Parameter(Mandatory=$true)][string]$VersionJson,[Parameter(Mandatory=$true)][string]$MinecraftRoot,[ValidateSet('en_us','zh_cn')][string]$Language='en_us',[string]$CompatibilityInstance,[string]$ModVersion='0.1.8',[switch]$FullPack,[ValidateSet('default','slim')][string]$Skin='default',[switch]$ExactSettings,[switch]$InPlace,[string]$EvidencePath,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest)
 $ErrorActionPreference='Stop'
 $projectRoot=Split-Path -Parent $PSScriptRoot
 $runRoot=Join-Path $projectRoot ('build\production-run-'+$ModVersion+'-'+$Language)
@@ -85,6 +85,7 @@ if($Diverse) {$launchArguments.Add('-Dposestudio.acceptance.diverse=true')}
 if($EntryTest) {$launchArguments.Add('-Dposestudio.acceptance.entry=true')}
 if($Usability -or $FinalTest) {$launchArguments.Add('-Dposestudio.acceptance.usability=true')}
 if($FinalTest) {$launchArguments.Add('-Dposestudio.acceptance.final=true')}
+if($ItemsTest) {$launchArguments.Add('-Dposestudio.acceptance.items=true')}
 $launchArguments.Add('-Dposestudio.acceptance.language='+$Language)
 $launchArguments.Add('-Dposestudio.acceptance.skin='+$Skin)
 if($ExactSettings) { $launchArguments.Add('-Dposestudio.acceptance.exact=true') }

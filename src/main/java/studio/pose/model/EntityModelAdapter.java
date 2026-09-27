@@ -23,10 +23,11 @@ public final class EntityModelAdapter {
     public final IdentityHashMap<ModelPart,ModelPart> skinBases=new IdentityHashMap<>();
     public final Set<String> editableBones=new LinkedHashSet<>();
     private final Set<ModelPart> modelRoots=Collections.newSetFromMap(new IdentityHashMap<>());
-    public final boolean player;
+    public final boolean player,humanoid;
     public net.minecraft.network.chat.Component status; public boolean ready;
     public EntityModelAdapter(EntityRenderer<?> renderer) {
         player=renderer instanceof LivingEntityRenderer<?,?> l && l.getModel() instanceof PlayerModel<?>;
+        humanoid=renderer instanceof LivingEntityRenderer<?,?> l && l.getModel() instanceof HumanoidModel<?>;
         try {
             if(renderer instanceof LivingEntityRenderer<?,?> l) addModel(l.getModel(),player);
             scanContainer(renderer,0);

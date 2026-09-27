@@ -46,6 +46,10 @@ public final class RenderContext {
         }
     }
     public static Frame current() { return FRAMES.isEmpty()?null:FRAMES.peek(); }
+    public static boolean neutralHumanoid(Entity entity) {
+        if(!entity.level().isClientSide) return false;
+        Frame f=current();return f!=null && f.actor()!=null && f.actor().frozen && f.adapter().humanoid && f.actor().id.equals(entity.getUUID());
+    }
     public static EntityModelAdapter.Binding binding(ModelPart part) {
         Frame f=current(); return f==null || f.adapter==null?null:f.adapter.bindings.get(part);
     }

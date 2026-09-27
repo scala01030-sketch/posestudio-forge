@@ -25,7 +25,11 @@
     "MinecraftInputMixin",
     "GameRendererMixin",
     "ClientLevelMixin",
-    "KeyboardHandlerMixin"
+    "KeyboardHandlerMixin",
+    "NeutralEntityRenderMixin",
+    "NeutralLivingRenderMixin",
+    "GenderLayerStudioMixin",
+    "GenderPhysicsStudioMixin"
   ],
   "injectors": {
     "defaultRequire": 1

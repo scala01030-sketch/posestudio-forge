@@ -20,7 +20,13 @@ public final class PoseController {
         // An optimizer may cancel an unbound part before our RETURN hook. Never retain state for it.
         SAVED.push(new Saved(p,p.x,p.y,p.z,p.xRot,p.yRot,p.zRot,p.xScale,p.yScale,p.zScale));
         ActorState a=RenderContext.current().actor();
-        BonePose pose=a.bones.computeIfAbsent(binding.name(),n->new BonePose(p.x,p.y,p.z,p.xRot/DEG,p.yRot/DEG,p.zRot/DEG));
+        BonePose pose=a.bones.computeIfAbsent(binding.name(),n->{
+            // A newly frozen humanoid starts in its model's rest pose, not a cached weapon animation.
+            if(RenderContext.current().adapter().humanoid) {
+                var rest=p.getInitialPose();return new BonePose(rest.x,rest.y,rest.z,rest.xRot/DEG,rest.yRot/DEG,rest.zRot/DEG);
+            }
+            return new BonePose(p.x,p.y,p.z,p.xRot/DEG,p.yRot/DEG,p.zRot/DEG);
+        });
         p.x=(float)pose.position[0];p.y=(float)pose.position[1];p.z=(float)pose.position[2];
         p.xRot=(float)pose.rotation[0]*DEG;p.yRot=(float)pose.rotation[1]*DEG;p.zRot=(float)pose.rotation[2]*DEG;
         var scale=a.boneScales.computeIfAbsent(binding.name(),n->new Vector3f(p.xScale,p.yScale,p.zScale));

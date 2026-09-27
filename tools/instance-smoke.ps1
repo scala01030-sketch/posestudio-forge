@@ -1,4 +1,4 @@
-param([string]$ModVersion='0.1.7',[ValidateSet('default','slim')][string]$Skin='default',[switch]$UserSkin,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest)
+param([string]$ModVersion='0.1.8',[ValidateSet('default','slim')][string]$Skin='default',[switch]$UserSkin,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest)
 $ErrorActionPreference='Stop'
 $projectRoot='E:\PoseStudio'
 $env:TEMP=Join-Path $projectRoot '.toolchain\temp';$env:TMP=$env:TEMP
@@ -25,7 +25,9 @@ try {
         $options=$options | ForEach-Object {if($_.StartsWith('resourcePacks:')) {'resourcePacks:'+((@($_.Substring(14)|ConvertFrom-Json)+@('file/PoseStudioAcceptanceSkin.zip'))|ConvertTo-Json -Compress)}else{$_}}
         [IO.File]::WriteAllLines((Join-Path $instance 'options.txt'),$options,[Text.UTF8Encoding]::new($false))
     }
-    & (Join-Path $PSHOME 'pwsh.exe') -NoProfile -File (Join-Path $PSScriptRoot 'production-smoke.ps1') -VersionJson (Join-Path $instance '1.20.1-Forge_47.4.22 Vanilla-tacz.json') -MinecraftRoot 'E:\minecrate\.minecraft' -Language zh_cn -CompatibilityInstance $instance -FullPack -ExactSettings -InPlace -ModVersion $ModVersion -Skin $Skin -Diverse:$Diverse -EntryTest:$EntryTest -Usability:$Usability -FinalTest:$FinalTest -EvidencePath (Join-Path $backup 'evidence') *> (Join-Path $backup 'game.log')
+    & (Join-Path $PSHOME 'pwsh.exe') -NoProfile -File (Join-Path $PSScriptRoot 'production-smoke.ps1') -VersionJson (Join-Path $instance '1.20.1-Forge_47.4.22 Vanilla-tacz.json') -MinecraftRoot 'E:\minecrate\.minecraft' -Language zh_cn -CompatibilityInstance $instance -FullPack -ExactSettings -InPlace -ModVersion $ModVersion -Skin $Skin -Diverse:$Diverse -EntryTest:$EntryTest -Usability:$Usability -FinalTest:$FinalTest -ItemsTest:$ItemsTest -EvidencePath (Join-Path $backup 'evidence') *> (Join-Path $backup 'game.log')
+    $testedJar=Join-Path $instance ('mods\posestudio-'+$ModVersion+'.jar')
+    [IO.File]::WriteAllText((Join-Path $backup 'evidence\official-jar.sha256'),(Get-FileHash -LiteralPath $testedJar -Algorithm SHA256).Hash,[Text.UTF8Encoding]::new($false))
     $results=Get-Content -LiteralPath (Join-Path $backup 'evidence\acceptance.txt')
     if(!$results -or @($results | Where-Object {$_ -notlike 'PASS *'}).Count -gt 0) {throw 'Actual-instance acceptance failed. See saved evidence.'}
     $success=$true

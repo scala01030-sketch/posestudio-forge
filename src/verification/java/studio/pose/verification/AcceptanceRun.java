@@ -186,15 +186,20 @@ public final class AcceptanceRun {
                 case 13 -> {
                     if(ticks<10) return;
                     check(mc.gameRenderer.getMainCamera().getPosition().distanceTo(new Vec3(0,-63.5,0))<.0001,"Free camera can enter solid blocks without collision");
+                    // Assert restoration before resumed AI, collision and live input can move the player.
+                    // Network exit and equipment restoration are exercised by the other actual-instance runs.
+                    pending=mc.getSingleplayerServer().submit(()-> {
+                        var p=mc.getSingleplayerServer().getPlayerList().getPlayers().get(0);FreezeService.end(p.getUUID());
+                        if(p.position().distanceTo(original)>.1) throw new AssertionError("Player original transform not restored immediately: original="+original+" current="+p.position());
+                    });
                     s.exit(true);advance();
                 }
                 case 14 -> {
-                    if(ticks<25) return;
+                    if(ticks<25 || !pending.isDone()) return;pending.join();
                     check(!s.active && !mc.options.hideGui,"Studio exit restores UI");
                     pending=mc.getSingleplayerServer().submit(()-> {
                         if(mc.getSingleplayerServer().overworld().getEntity(skeleton)!=null) throw new AssertionError("Temporary skeleton remained after Studio exit");
                         Entity e=mc.getSingleplayerServer().overworld().getEntity(vanilla);if(FreezeService.frozen(e) || ((Mob)e).isNoAi() || e.isNoGravity()) throw new AssertionError("Actor restoration failed");
-                        var p=mc.getSingleplayerServer().getPlayerList().getPlayers().get(0);if(p.position().distanceTo(original)>.1) throw new AssertionError("Player original transform not restored: original="+original+" current="+p.position());
                     });advance();
                 }
                 case 15 -> { if(!pending.isDone()) return;pending.join();check(true,"Server actor restoration after exit");Files.write(evidence.resolve("acceptance.txt"),results);System.out.println("POSE_ACCEPTANCE COMPLETE");mc.stop();stage=99; }
@@ -271,7 +276,7 @@ public final class AcceptanceRun {
                         for(int limit:new int[]{5,8,10}) {
                             studio.pose.StudioConfig.MAX_ACTORS.set(limit);List<UUID> added=new ArrayList<>();
                             try {
-                                while(FreezeService.activeCount(p.serverLevel())<limit) {var result=FreezeService.place(p,new net.minecraft.resources.ResourceLocation("minecraft:cow"),new ActorTransform(2,-60,3,0,0));if(!result.error().isEmpty()) throw new AssertionError("Capacity fill failed");added.add(result.actor());}
+                                while(FreezeService.activeCount(p.serverLevel())-FreezeService.propCount(p.serverLevel())<limit) {var result=FreezeService.place(p,new net.minecraft.resources.ResourceLocation("minecraft:cow"),new ActorTransform(2,-60,3,0,0));if(!result.error().isEmpty()) throw new AssertionError("Capacity fill failed");added.add(result.actor());}
                                 if(!FreezeService.place(p,new net.minecraft.resources.ResourceLocation("minecraft:cow"),new ActorTransform(2,-60,3,0,0)).error().equals("posestudio.error.placement_limit")) throw new AssertionError("Placement exceeded "+limit);
                                 if(!FreezeService.acquire(p,nearby.get(0)).equals("posestudio.error.placement_limit")) throw new AssertionError("Existing actor freeze exceeded "+limit);
                                 if(!FreezeService.acquire(p,vanilla).isEmpty()) throw new AssertionError("Already frozen actor consumed another slot");

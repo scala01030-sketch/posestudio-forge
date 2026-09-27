@@ -152,7 +152,8 @@ public final class StudioScreen extends Screen {
         for(int i=0;i<rows && i+actorScroll<entities.size();i++) {
             Entity e=entities.get(i+actorScroll);int y=72+i*15;boolean selected=s.selection.contains(e.getUUID());
             if(selected) g.fill(3,y-2,left-3,y+12,0xff3b536a);
-            g.drawString(font,trim(e.getName().getString()+" #"+e.getId(),left-12),6,y,selected?0xffffd878:0xffeeeeee,false);
+            String name=e instanceof net.minecraft.world.entity.item.ItemEntity item?ItemLabels.name(item.getItem()).getString():e.getName().getString();
+            g.drawString(font,trim(name+" #"+e.getId(),left-12),6,y,selected?0xffffd878:0xffeeeeee,false);
         }
         g.drawString(font,Component.translatable("posestudio.ui.bones"),6,boneStart,0xffbdd5ef,false);
         int boneRows=Math.max(0,(height-49-boneStart)/14);

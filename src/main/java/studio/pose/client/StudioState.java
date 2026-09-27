@@ -26,7 +26,7 @@ public final class StudioState {
     public int actorRotationAxis;
     private Mode editMode=Mode.ACTOR;
     public boolean active, capture;
-    private boolean requested, oldHideGui;
+    private boolean requested, oldHideGui,awaitingEntryProps;
     private net.minecraft.client.CameraType oldCameraType;
     private net.minecraft.client.multiplayer.ClientLevel studioLevel;
     private int oldGuiScale;
@@ -58,6 +58,19 @@ public final class StudioState {
         StudioNetwork.batch(true,visible);
     }
     public boolean entering() {return requested && !active;}
+    public void sceneProps(java.util.List<StudioNetwork.Entry> entries) {
+        if(!active) return;var live=new HashSet<UUID>();for(var entry:entries) live.add(entry.actor());
+        for(UUID id:new HashSet<>(placed)) if(!live.contains(id)) {
+            retiring.put(id,System.nanoTime()+10_000_000_000L);placed.remove(id);actors.remove(id);pendingPlacements.remove(id);selection.remove(id);
+            if(id.equals(selected)) selected=selection.stream().findFirst().orElse(null);
+        }
+        for(var entry:entries) {
+            placed.add(entry.actor());var actor=actors.computeIfAbsent(entry.actor(),id->new ActorState(id,entry.transform()));
+            actor.frozen=true;actor.transform=entry.transform();pin(actor);
+        }
+        if(awaitingEntryProps) {awaitingEntryProps=false;message=Component.translatable("posestudio.status.entry_frozen",actors.values().stream().filter(a->a.frozen).count());}
+        if(Minecraft.getInstance().screen instanceof StudioScreen screen) screen.refresh();
+    }
     public void batchReply(StudioNetwork.BatchReply r) {
         var mc=Minecraft.getInstance();
         if(!r.error().isEmpty()) {
@@ -66,6 +79,7 @@ public final class StudioState {
         }
         if(r.enter()) {
             if(!requested) {StudioNetwork.send(StudioNetwork.END,empty,zero);return;}
+            awaitingEntryProps=true;
             // Camera was captured on F6. Retain it while the authoritative freeze acknowledgement arrives.
             reply(new StudioNetwork.Reply(StudioNetwork.BEGIN,empty,zero,""));
         }
@@ -179,7 +193,7 @@ public final class StudioState {
     public void exit(boolean send) {
         Minecraft mc=Minecraft.getInstance();
         if(send && (requested || active) && mc.getConnection()!=null) StudioNetwork.send(StudioNetwork.END,empty,zero);
-        requested=false;
+        requested=false;awaitingEntryProps=false;
         if(active) {
             mc.options.hideGui=oldHideGui;if(oldCameraType!=null) mc.options.setCameraType(oldCameraType);
             mc.options.guiScale().set(oldGuiScale);mc.resizeDisplay();

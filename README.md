@@ -7,7 +7,7 @@
 ## 安装
 
 1. 使用 Java 17、Minecraft Java Edition **1.20.1** 和 Forge **47.4.10 或同一 47.x 系列的兼容版本**。
-2. 将 `release/posestudio-0.1.7.jar` 放入目标游戏实例的 `mods` 目录。
+2. 将 `release/posestudio-0.1.8.jar` 放入目标游戏实例的 `mods` 目录。
 3. 单人世界直接使用；多人世界需要客户端和服务器都安装此模组，操作者需要 OP 等级 2。
 4. **不要安装**带 `verification-fixtures` 后缀的测试夹具 JAR。
 
@@ -21,7 +21,17 @@ v0.1.1 跟随 Minecraft 的语言设置。打开 **选项 → 语言 → 简体�
 
 已有 Pose JSON 仍使用原来的稳定骨骼键名，加载方式不变。第三方模组自定义、未知骨骼名称会保留原名，实体名称使用 Minecraft 或对应模组自己的语言资源。姿势文件名仍使用英文字母、数字、下划线和短横线。
 
-更新时移走旧的 `posestudio-*.jar`，只安装新的 `posestudio-0.1.7.jar`，避免同一模组重复加载。保留游戏实例的 `posestudio/poses` 目录即可继续读取已有姿势。
+更新时移走旧的 `posestudio-*.jar`，只安装新的 `posestudio-0.1.8.jar`，避免同一模组重复加载。保留游戏实例的 `posestudio/poses` 目录即可继续读取已有姿势。
+
+## v0.1.8：完整物品目录与冻结时分离装备
+
+“添加”分为“实体 / 物品”。物品同时读取所有非空气注册物品和当前世界创造物品栏的完整变体；TaCZ 枪械可以按名称、Mod ID、注册 ID 或 GunId 搜索。添加时保留枪械 ID、附件、皮肤等 ItemStack 数据；原版物品与 Mod 物品均可成为独立摆拍对象。
+
+冻结角色时，主手与副手的非空物品自动分离到角色旁边，角色空手并从模型的中立站姿进入编辑。分离出的物品在角色列表中独立显示，在 Actor 模式调整位置和自由旋转；未提供可读取 ModelPart 的枪械只能整体编辑。恢复角色或退出 Studio 时，将完整原装备还原到原来的热栏位置及副手，并清除展示副本。
+
+分离物品计入非生物预算；超限时拒绝冻结，装备保持原状。生物默认 8（5–10），非生物默认 25（20–30）的两类预算不变。已有 Pose 编辑和关节实现保留。新协议为 5，多人两端需更新同版。详见 [修复说明](docs/BUGFIX-0.1.8.md)。
+
+兼容复核覆盖当前包同时加载的 SkinLayers3D、EMF / ETF、Physics Mod、TaCZ / TaCZ Tweaks、CarryOn，以及 Wildfire Gender + FemalePlasticSurgery 的附加身体层。冻结时处理爬行 / 游泳渲染偏移、搬运手臂姿态和附加身体层的动态覆盖。CustomSkinLoader / SimpleBedrockModel 的普通 64×64 皮肤路径参与组合测试；网络皮肤服务和专用 Bedrock 自定义模型未逐模型验收。具体版本与实际测试范围见 [0.1.8 验收](docs/ACCEPTANCE-0.1.8.md)。
 
 ## v0.1.7 收工版：Actor 整体自由旋转与独立物体预算
 

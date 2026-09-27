@@ -6,6 +6,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import studio.pose.client.StudioState;
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {
+    @Inject(method="isCrouching",at=@At("HEAD"),cancellable=true)
+    private void pose$standingRender(org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> ci) {
+        if(studio.pose.model.RenderContext.neutralHumanoid((LocalPlayer)(Object)this)) ci.setReturnValue(false);
+    }
     @Inject(method="aiStep",at=@At(value="INVOKE",target="Lnet/minecraft/client/player/Input;tick(ZF)V",shift=At.Shift.AFTER))
     private void pose$input(CallbackInfo ci) {
         if(!StudioState.INSTANCE.active && !StudioState.INSTANCE.entering()) return;
