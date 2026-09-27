@@ -163,7 +163,14 @@ public final class StudioState {
     public void tick() {
         if(Minecraft.getInstance().level!=studioLevel) { exit(true); return; }
         var iterator=pendingPlacements.entrySet().iterator();
-        while(iterator.hasNext()) { var entry=iterator.next();Entity e=entity(entry.getKey());if(e==null) continue;select(e);ActorState a=actor();a.transform=entry.getValue();a.frozen=true;a.renderRequestedNanos=System.nanoTime();iterator.remove();message=Component.translatable("posestudio.status.placed");if(Minecraft.getInstance().screen instanceof StudioScreen screen) screen.refresh(); }
+        while(iterator.hasNext()) {
+            var entry=iterator.next();Entity e=entity(entry.getKey());if(e==null) continue;
+            ActorState a=actors.computeIfAbsent(entry.getKey(),id->new ActorState(id,entry.getValue()));
+            a.transform=entry.getValue();a.frozen=true;a.renderRequestedNanos=System.nanoTime();pin(a);
+            iterator.remove();message=Component.translatable("posestudio.status.placed");
+            // Publish the completed actor state before selection rebuilds the property panel.
+            select(e);
+        }
         for(ActorState a:actors.values()) if(a.frozen) pin(a);
     }
     public ActorTransform placementInView() {

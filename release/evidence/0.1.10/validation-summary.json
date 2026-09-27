@@ -1,0 +1,21 @@
+{
+  "version": "0.1.10",
+  "officialJarSha256": "C1A44287E1A02CEDD01855099D5E8EEAF7B5A619E2DBEE886B91907D4FAF794B",
+  "sourceZipSha256": "7121358BC87EE22BD6861BD854A0EAEC276689D793AD4287BABB89109284DBD3",
+  "instance": "E:\\minecrate\\.minecraft\\versions\\1.20.1-Forge_47.4.22 Vanilla-tacz",
+  "scope": "Refresh static Pose panel after placed entity/model parts become ready",
+  "gameRuns": {
+    "placement": {
+      "status": "PASS",
+      "checks": 55
+    },
+    "core": {
+      "status": "PASS",
+      "checks": 119
+    }
+  },
+  "unitTests": 12,
+  "originalSettingsRestored": true,
+  "fixtureRemoved": true,
+  "previousCompatibilityMatrix": "0.1.8; not fully rerun for this UI and synchronization patch"
+}

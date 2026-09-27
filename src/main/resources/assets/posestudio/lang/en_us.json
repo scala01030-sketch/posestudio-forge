@@ -99,6 +99,7 @@
   "posestudio.bone.left_wing": "Left wing",
   "posestudio.bone.right_wing": "Right wing",
   "posestudio.adapter.not_frozen": "Model ready; click Freeze to start editing.",
+  "posestudio.adapter.wait_pose": "Syncing model parts; pose properties will appear automatically.",
   "posestudio.adapter.not_visible": "Model ready, but no visible render received. Point the camera at the actor or check entity rendering compatibility.",
   "posestudio.ui.remove": "Remove",
   "posestudio.catalog.title": "Add entities / items",

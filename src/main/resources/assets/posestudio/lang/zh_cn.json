@@ -99,6 +99,7 @@
   "posestudio.bone.left_wing": "左翼",
   "posestudio.bone.right_wing": "右翼",
   "posestudio.adapter.not_frozen": "模型已读取；请点击“冻结”开始编辑。",
+  "posestudio.adapter.wait_pose": "正在同步模型部件，完成后自动显示姿势属性。",
   "posestudio.adapter.not_visible": "模型已读取，但未收到画面渲染；请将镜头移向角色，或检查实体渲染兼容性。",
   "posestudio.ui.remove": "移除",
   "posestudio.catalog.title": "添加实体 / 物品",

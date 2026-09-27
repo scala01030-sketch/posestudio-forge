@@ -26,6 +26,8 @@ public final class StudioScreen extends Screen {
     private int cameraDrag=-1;
     private Runnable cameraUndo;
     private boolean cameraChanged;
+    private record Binding(UUID actor,StudioState.Mode mode,String bone,boolean frozen,boolean poseReady,boolean rendered) {}
+    private Binding bound;
     public StudioScreen() { super(Component.translatable("posestudio.ui.title")); }
     @Override public boolean isPauseScreen() { return false; }
     @Override protected void init() { refresh(); }
@@ -48,7 +50,7 @@ public final class StudioScreen extends Screen {
         for(int i=0;i<4;i++) {final int side=i;button("posestudio.ui.view_"+views[i],left+6+i*viewWidth,31,viewWidth-2,()->{studio.pose.camera.StudioViews.focus(side);if(s.mode==StudioState.Mode.CAMERA) refresh();});}
         Button freezeButton=button(s.selected!=null && s.placed.contains(s.selected)?"posestudio.ui.placed_frozen":s.actor()!=null && s.actor().frozen?"posestudio.ui.restore":"posestudio.ui.freeze",5,31,left-10,s::freeze);
         freezeButton.active=s.selected==null || !s.placed.contains(s.selected);
-        rescan();boneStart=Math.max(110,height/2-6);
+        rescan();reconcileBone();boneStart=Math.max(110,height/2-6);
         ActorState actor=s.actor();
         labels=switch(s.mode) {
             case ACTOR -> new String[]{"posestudio.property.position_x","posestudio.property.position_y","posestudio.property.position_z","posestudio.property.yaw","posestudio.property.pitch","posestudio.property.roll"};
@@ -60,10 +62,12 @@ public final class StudioScreen extends Screen {
         for(int i=0;i<labels.length;i++) {
             EditBox box=new EditBox(font,width-right+78,55+i*21,right-85,18,Component.translatable(labels[i]));
             box.setMaxLength(24);box.setValue(String.format(Locale.ROOT,"%.3f",initial[i]));values.add(addRenderableWidget(box));
+            if(s.mode==StudioState.Mode.POSE && !poseReady()) box.setEditable(false);
             if(s.mode==StudioState.Mode.POSE && s.bone.matches("(left|right)_(elbow|knee)") && i>=3) box.setEditable(false);
         }
         propertyBottom=57+labels.length*21;
-        button("posestudio.ui.apply",width-right+6,propertyBottom,right-12,this::apply);
+        Button applyButton=button("posestudio.ui.apply",width-right+6,propertyBottom,right-12,this::apply);
+        applyButton.active=s.mode==StudioState.Mode.CAMERA || actor!=null && actor.frozen && (s.mode!=StudioState.Mode.POSE || poseReady());
         if(s.mode==StudioState.Mode.ACTOR) button(s.actorRotate?"posestudio.ui.actor_rotate":"posestudio.ui.actor_move",width-right+6,propertyBottom+24,right-12,()->{StudioOverlay.release();s.actorRotate=!s.actorRotate;refresh();});
         if(s.mode==StudioState.Mode.ACTOR) for(int axis=0;axis<3;axis++) {
             final int selectedAxis=axis;
@@ -84,6 +88,14 @@ public final class StudioScreen extends Screen {
             button("posestudio.ui.fly",width-right+6,propertyBottom+24,right-12,s::fly);
             button("posestudio.ui.return_edit",width-right+6,propertyBottom+48,right-12,s::openEditor);
         }
+        bound=binding();
+    }
+    private boolean poseReady() {ActorState a=s.actor();return a!=null && a.frozen && a.bones.containsKey(s.bone) && boneNames.contains(s.bone);}
+    private Binding binding() {ActorState a=s.actor();return new Binding(s.selected,s.mode,s.bone,a!=null && a.frozen,poseReady(),a!=null && a.lastMainRenderNanos>0);}
+    private void reconcileBone() {
+        if(s.mode!=StudioState.Mode.POSE || boneNames.isEmpty() || boneNames.contains(s.bone)) return;
+        // Visible geometry may differ from the adapter's early, unrendered model tree.
+        s.bone=boneNames.stream().min(Comparator.comparingInt((String name)->name.toLowerCase(Locale.ROOT).contains("head")?0:1).thenComparing(name->name)).orElse(s.bone);
     }
     public void rescan() {
         if(minecraft.level==null) return;
@@ -142,7 +154,12 @@ public final class StudioScreen extends Screen {
             } else { PoseSerializer.save(dir,poseName.getValue(),type,a);s.message=Component.translatable("posestudio.status.saved",poseName.getValue()); }
         } catch(Exception ex) { s.message=StudioText.fileError(ex); }
     }
-    @Override public void tick() { if(minecraft.level==null || !s.active) onClose(); else {boolean empty=boneNames.isEmpty();rescan();if(empty && !boneNames.isEmpty()) refresh();} }
+    @Override public void tick() {
+        if(minecraft.level==null || !s.active) {onClose();return;}
+        rescan();reconcileBone();
+        // Rebind only on an actual selection/readiness transition. Stable ticks keep edits and focus.
+        if(!binding().equals(bound)) refresh();
+    }
     private String trim(String text,int pixels) { return font.plainSubstrByWidth(text,Math.max(1,pixels)); }
     @Override public void render(GuiGraphics g,int mx,int my,float partial) {
         StudioOverlay.draw(g,width,height,left,right);
@@ -171,8 +188,9 @@ public final class StudioScreen extends Screen {
         Component footer=missingRender?Component.translatable("posestudio.adapter.not_visible"):s.message;
         g.drawString(font,trim(footer.getString(),width-12),6,height-20,0xffffdd99,false);
         g.drawString(font,trim(StudioKeys.shortcuts(s.mode==StudioState.Mode.ACTOR).getString(),width-12),6,height-10,0xffbdd5ef,false);
-        if(actor!=null && (!actor.frozen || !actor.adapterReady || missingRender)) {
-            Component status=missingRender?Component.translatable("posestudio.adapter.not_visible"):actor.adapterReady && !actor.frozen?Component.translatable("posestudio.adapter.not_frozen"):actor.adapterStatus;
+        boolean waitingPose=actor!=null && actor.frozen && actor.adapterReady && s.mode==StudioState.Mode.POSE && (!poseReady() || actor.lastMainRenderNanos==0);
+        if(actor!=null && (!actor.frozen || !actor.adapterReady || missingRender || waitingPose)) {
+            Component status=missingRender?Component.translatable("posestudio.adapter.not_visible"):waitingPose?Component.translatable("posestudio.adapter.wait_pose"):actor.adapterReady && !actor.frozen?Component.translatable("posestudio.adapter.not_frozen"):actor.adapterStatus;
             g.drawString(font,trim(status.getString(),width-left-right-12),left+6,57,0xffffdd99,false);
         }
         super.render(g,mx,my,partial);
