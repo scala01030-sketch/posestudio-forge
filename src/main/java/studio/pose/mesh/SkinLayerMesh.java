@@ -8,8 +8,8 @@ import org.joml.Vector3f;
 import studio.pose.model.PoseController;
 import studio.pose.model.RenderContext;
 
-/** Deforms an optional skin mesh after its own voxel offsets/scales, in the shared limb space.
- * No texture, cached mesh or third-party transformer is changed. Both shader passes use this path. */
+
+
 public final class SkinLayerMesh {
     public static VertexConsumer wrap(ModelPart part,VertexConsumer original) {
         return wrap(part,original,false);

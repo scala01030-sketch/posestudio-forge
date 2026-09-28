@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.glfw.GLFW;
 import org.joml.Vector3d;
 
-/** Independent camera coordinates. It never moves or turns the player's body. */
+
 public final class CameraController {
     public double x,y,z; public float pitch,yaw,roll; public double fov=70,speed=5;
     private long previous;
@@ -24,7 +24,7 @@ public final class CameraController {
         yaw+=(float)(dx*.15);pitch=Math.max(-90,Math.min(90,pitch+(float)(dy*.15)));
     }
     public void zoom(double steps) { fov=Math.max(10,Math.min(150,fov-steps*2)); }
-    /** Drag the scene in the camera's screen plane, including camera roll. */
+
     public void pan(double dx,double dy) {
         double a=Math.toRadians(yaw),p=Math.toRadians(pitch),r=Math.toRadians(roll);
         Vector3d right=new Vector3d(Math.cos(a),0,Math.sin(a));

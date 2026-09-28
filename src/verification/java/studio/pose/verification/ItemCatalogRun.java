@@ -21,7 +21,7 @@ import studio.pose.network.StudioNetwork;
 import studio.pose.server.FreezeService;
 import studio.pose.ui.*;
 
-/** Actual installed pack catalogs and equipment. No user world or user inventory is opened. */
+
 public final class ItemCatalogRun {
     private int stage,ticks,index;
     private final long start=System.nanoTime();

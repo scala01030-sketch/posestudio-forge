@@ -1,6 +1,6 @@
 package studio.pose.data;
 
-/** Degrees and model pixels; deliberately contains no time or animation state. */
+
 public final class BonePose {
     public double[] rotation = {0, 0, 0};
     public double[] position = {0, 0, 0};

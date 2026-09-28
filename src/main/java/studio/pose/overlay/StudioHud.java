@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import studio.pose.client.StudioKeys;
 import studio.pose.client.StudioState;
 
-/** Rendered after the world even when vanilla HUD is hidden. Never drawn in Capture. */
+
 public final class StudioHud {
     private static long lastFrame;
     private StudioHud() {}

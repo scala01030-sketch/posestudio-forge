@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import studio.pose.model.RenderContext;
 
-/** Only the active frozen humanoid renderer sees a standing locomotion baseline. */
+
 @Mixin(Entity.class)
 public abstract class NeutralEntityRenderMixin {
     @Inject(method="getPose",at=@At("HEAD"),cancellable=true)

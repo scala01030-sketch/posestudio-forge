@@ -9,7 +9,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import studio.pose.mixin.ModelPartAccess;
 import studio.pose.model.*;
 
-/** Uses the baked cube's actual UVs: classic, slim, skin overlays and resource textures stay compatible. */
+
 public final class PlayerLimbMesh {
     private record Vertex(Vector3f p,float u,float v) {
         Vertex lerp(Vertex b,float t) { return new Vertex(new Vector3f(p).lerp(b.p,t),u+(b.u-u)*t,v+(b.v-v)*t); }
@@ -22,7 +22,7 @@ public final class PlayerLimbMesh {
         if(binding==null || !binding.playerLimb()) return false;
         String name=PoseController.joint(binding.name()); if(name==null) return false;
         var actor=RenderContext.current().actor(); var joint=actor.bones.get(name); if(joint==null) return false;
-        // Zero rotation uses Mojang's original cube renderer, preserving its exact resting shape.
+
         if(Math.abs(joint.rotation[0])+Math.abs(joint.rotation[1])+Math.abs(joint.rotation[2])<.00001) return false;
         List<ModelPart.Cube> cubes=((ModelPartAccess)(Object)part).pose$cubes();
         List<List<Face>> faces=new ArrayList<>();
@@ -36,7 +36,7 @@ public final class PlayerLimbMesh {
         int startVertices=actor.bentVertices;
         for(var group:faces) for(Face face:group) {
             Vertex[] q=face.vertices;
-            // Cube polygons have two horizontal and two vertical edges. Find the vertical edge pairing.
+
             int first=-1;
             for(int i=0;i<4;i++) if(Math.abs(q[i].p.y-q[(i+1)%4].p.y)>.001) { first=i;break; }
             if(first<0) emit(q,bend,face.normal,matrix,consumer,light,overlay,r,g,b,a,channel);

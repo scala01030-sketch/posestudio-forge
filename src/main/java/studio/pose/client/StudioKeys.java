@@ -3,7 +3,7 @@ package studio.pose.client;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
-/** Uses current KeyMappings on every event and render, including bindings changed in Controls. */
+
 public final class StudioKeys {
     private StudioKeys() {}
     public static boolean mapped(int key,int scan) {return ClientEvents.TOGGLE.matches(key,scan) || ClientEvents.EDITOR.matches(key,scan) || ClientEvents.CAPTURE.matches(key,scan);}

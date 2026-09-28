@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import studio.pose.server.FreezeService;
 
-/** ServerLevel runs despawn checks outside tickNonPassenger, even for a frozen mob. */
+
 @Mixin(Mob.class)
 public abstract class MobMixin {
     @Inject(method="checkDespawn",at=@At("HEAD"),cancellable=true)

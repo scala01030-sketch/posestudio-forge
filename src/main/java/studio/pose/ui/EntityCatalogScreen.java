@@ -10,7 +10,7 @@ import studio.pose.client.StudioState;
 import studio.pose.data.ActorTransform;
 import studio.pose.network.StudioNetwork;
 
-/** A searchable registry catalog. Placement uses the same server locks as existing actors. */
+
 public final class EntityCatalogScreen extends Screen {
     private List<SceneCatalog.Entry> entries=List.of(),allEntries=List.of(),itemEntries;
     private SceneCatalog.Entry selected;

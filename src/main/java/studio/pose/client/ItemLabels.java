@@ -6,7 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-/** Optional native TaCZ asset names without changing an item's NBT or requiring TaCZ. */
+
 public final class ItemLabels {
     private static boolean resolved;
     private static Method gunIndex;

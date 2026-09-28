@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import studio.pose.mesh.SkinLayerMesh;
 
-/** Optional bridge: absent Skin Layers 3D requires no dependency and no substitute rendering. */
+
 @Pseudo
 @Mixin(targets="dev.tr7zw.skinlayers.render.CustomizableModelPart",remap=false)
 public abstract class SkinLayersMeshMixin {

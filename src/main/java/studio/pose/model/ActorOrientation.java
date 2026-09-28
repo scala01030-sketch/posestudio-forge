@@ -6,7 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import studio.pose.client.StudioState;
 
-/** Whole actor rotation wraps the original renderer, including renderers that ignore entity pitch/roll. */
+
 public final class ActorOrientation {
     private ActorOrientation() {}
     public static org.joml.Quaternionf rotation(studio.pose.data.ActorTransform t) {return new org.joml.Quaternionf().rotationY((float)Math.toRadians(-t.yaw())).rotateX((float)Math.toRadians(t.pitch())).rotateZ((float)Math.toRadians(t.roll()));}
@@ -22,7 +22,7 @@ public final class ActorOrientation {
         float body=living==null?0:living.yBodyRot,bodyOld=living==null?0:living.yBodyRotO,head=living==null?0:living.yHeadRot,headOld=living==null?0:living.yHeadRotO;
         stack.pushPose();
         try {
-            // Let every native/mod renderer draw its zero-heading baseline once, then rotate that result.
+
             entity.setYRot(0);entity.yRotO=0;entity.setXRot(0);entity.xRotO=0;
             if(living!=null) {living.yBodyRot=living.yBodyRotO=living.yHeadRot=living.yHeadRotO=0;}
             var t=actor.transform;stack.mulPose(Axis.YP.rotationDegrees(-t.yaw()));stack.mulPose(Axis.XP.rotationDegrees(t.pitch()));stack.mulPose(Axis.ZP.rotationDegrees(t.roll()));

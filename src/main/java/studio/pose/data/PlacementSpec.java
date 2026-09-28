@@ -4,7 +4,7 @@ import java.util.UUID;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-/** A scene source is either a registered entity, a complete item stack, or server-owned equipment. */
+
 public record PlacementSpec(Kind kind, ResourceLocation type, ItemStack stack, UUID source) {
     public enum Kind { ENTITY, ITEM, MAIN_HAND, OFF_HAND }
     public static final UUID NONE=new UUID(0,0);

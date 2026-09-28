@@ -23,7 +23,7 @@ import studio.pose.overlay.StudioOverlay;
 import studio.pose.ui.StudioScreen;
 import studio.pose.verification.mixin.KeyboardAccess;
 
-/** Exercises native keyboard dispatch, GUI gestures and integrated-server axis movement in the user's pack. */
+
 public final class UsabilityRun {
     private int stage,ticks,viewIndex,axisIndex;
     private final long start=System.nanoTime();

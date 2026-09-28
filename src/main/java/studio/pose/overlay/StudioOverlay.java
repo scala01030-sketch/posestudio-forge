@@ -11,7 +11,7 @@ import java.lang.Math;
 import studio.pose.client.*;
 import studio.pose.data.BonePose;
 
-/** The editor is drawn over the real world viewport, with projection shared by display and picking. */
+
 public final class StudioOverlay {
     private static Matrix4f projection=new Matrix4f(),view=new Matrix4f();
     private static Vec3 camera=Vec3.ZERO;
@@ -121,7 +121,7 @@ public final class StudioOverlay {
     public static boolean click(double x,double y) {
         StudioState s=StudioState.INSTANCE;ActorState a=s.actor();Point cursor=new Point(x,y);
         if(s.mode==StudioState.Mode.POSE && a!=null && a.frozen) {
-            // Small node targets win over crossing gizmo arcs.
+
             ActorState.Node closest=null;double nodeDistance=6;
             for(var n:a.nodes.values()) {if(!visibleNode(n)) continue;Point p=node(n);if(p!=null && Math.hypot(p.x-x,p.y-y)<nodeDistance) {nodeDistance=Math.hypot(p.x-x,p.y-y);closest=n;}}
             if(closest!=null) {s.bone=closest.name();return true;}
@@ -136,7 +136,7 @@ public final class StudioOverlay {
         }
         Entity picked=pickEntity(x,y);if(picked!=null) { s.select(picked);return true; }return false;
     }
-    /** Actor mode reserves model hits for translation; empty viewport retains camera controls. */
+
     public static boolean actorClick(double x,double y,int button,boolean additive) {
         var s=StudioState.INSTANCE;
         if(!additive && s.actorRotate && s.movableSelection()) {
@@ -195,7 +195,7 @@ public final class StudioOverlay {
         s.moveSelection(actorOrigin,new Vec3(delta.x,delta.y,delta.z));return true;
     }
     public static Point actorPoint(UUID id) {Entity e=StudioState.INSTANCE.entity(id);return e==null?null:projectWorld(studio.pose.model.ActorOrientation.point(e,e.getBoundingBox().getCenter(),false));}
-    /** The end-on axis gets an offset handle and vertical depth dragging, instead of an unpickable point. */
+
     public static Point translationHandle(int axis,double fraction) {
         var s=StudioState.INSTANCE;Entity e=s.entity(s.selected);if(e==null) return null;
         Vec3 center=studio.pose.model.ActorOrientation.point(e,e.getBoundingBox().getCenter(),false);Point origin=projectWorld(center);if(origin==null) return null;

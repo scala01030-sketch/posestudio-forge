@@ -2,7 +2,7 @@ package studio.pose;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-/** Server owns the shared Studio budget; Forge synchronizes SERVER config to connected clients. */
+
 public final class StudioConfig {
     public static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.IntValue MAX_ACTORS;

@@ -17,7 +17,7 @@ import studio.pose.client.*;
 import studio.pose.data.*;
 import studio.pose.ui.*;
 
-/** Fast catalog return plus controlled partial-model arrival in the real client GUI. */
+
 public final class PlacementReadyRun {
     private static final String[] TYPES={"minecraft:chicken","minecraft:skeleton","minecraft:horse","tacz:target_minecart","lrtactical:smoke_grenade"};
     private final Path evidence=Path.of(System.getProperty("posestudio.acceptance.evidence"));
@@ -71,8 +71,8 @@ public final class PlacementReadyRun {
                     check(a.bones.containsKey(s.bone) && a.editableBones.contains(s.bone),"selected bone belongs to the rendered editable model");
                     check(matches(fields(mc),a.bones.get(s.bone)),"initial numerical fields bind to actual selected model data");
                     if(index==0) {
-                        // Stage a nonempty early model snapshot, then publish the chosen bone.
-                        // This deterministically covers the packet/render-order race without timing sleeps.
+
+
                         var all=new LinkedHashMap<>(a.bones);
                         part=a.editableBones.stream().filter(n->all.containsKey(n) && Arrays.stream(all.get(n).position).anyMatch(v->Math.abs(v)>.1)).findFirst().orElseThrow();
                         s.bone=part;a.bones.remove(part);returned.refresh();

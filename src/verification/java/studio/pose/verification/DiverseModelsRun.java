@@ -21,7 +21,7 @@ import studio.pose.model.RenderContext;
 import studio.pose.mixin.ModelPartAccess;
 import studio.pose.ui.*;
 
-/** Actual pack models, varied bones, transforms and controls. Never shipped in the main JAR. */
+
 public final class DiverseModelsRun {
     private static final String[] TYPES={"minecraft:wolf","minecraft:horse","minecraft:chicken","minecraft:rabbit",
         "minecraft:creeper","minecraft:enderman",

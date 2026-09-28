@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import studio.pose.model.*;
 
-/** This layer reads body fields directly instead of rendering a ModelPart. */
+
 @Pseudo
 @Mixin(targets="com.wildfire.render.GenderLayer",remap=false)
 public abstract class GenderLayerStudioMixin extends RenderLayer<AbstractClientPlayer,PlayerModel<AbstractClientPlayer>> {

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import studio.pose.model.RenderContext;
 
-/** Freeze only the current Studio actor's CEM animations. Models and textures remain enabled. */
+
 @Pseudo
 @Mixin(targets="traben.entity_model_features.models.parts.EMFModelPartRoot",remap=false)
 public abstract class EmfAnimationMixin {

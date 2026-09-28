@@ -94,7 +94,7 @@ public final class StudioScreen extends Screen {
     private Binding binding() {ActorState a=s.actor();return new Binding(s.selected,s.mode,s.bone,a!=null && a.frozen,poseReady(),a!=null && a.lastMainRenderNanos>0);}
     private void reconcileBone() {
         if(s.mode!=StudioState.Mode.POSE || boneNames.isEmpty() || boneNames.contains(s.bone)) return;
-        // Visible geometry may differ from the adapter's early, unrendered model tree.
+
         s.bone=boneNames.stream().min(Comparator.comparingInt((String name)->name.toLowerCase(Locale.ROOT).contains("head")?0:1).thenComparing(name->name)).orElse(s.bone);
     }
     public void rescan() {
@@ -149,7 +149,7 @@ public final class StudioScreen extends Screen {
                 var doc=PoseSerializer.load(dir,poseName.getValue());
                 if(!type.equals(doc.entity)) { s.message=Component.translatable("posestudio.status.type_mismatch");return; }
                 s.undo.remember(s.undo.poseSnapshot(a));int applied=0;for(var entry:doc.bones.entrySet()) if(a.bones.containsKey(entry.getKey())) { a.bones.put(entry.getKey(),entry.getValue().copy());applied++; }
-                // Loading a pose intentionally keeps the current staging position. Actor transform is saved for reference.
+
                 s.message=Component.translatable("posestudio.status.loaded",applied); refresh();
             } else { PoseSerializer.save(dir,poseName.getValue(),type,a);s.message=Component.translatable("posestudio.status.saved",poseName.getValue()); }
         } catch(Exception ex) { s.message=StudioText.fileError(ex); }
@@ -157,7 +157,7 @@ public final class StudioScreen extends Screen {
     @Override public void tick() {
         if(minecraft.level==null || !s.active) {onClose();return;}
         rescan();reconcileBone();
-        // Rebind only on an actual selection/readiness transition. Stable ticks keep edits and focus.
+
         if(!binding().equals(bound)) refresh();
     }
     private String trim(String text,int pixels) { return font.plainSubstrByWidth(text,Math.max(1,pixels)); }
@@ -238,7 +238,7 @@ public final class StudioScreen extends Screen {
         if(StudioKeys.press(key,scan)) return true;
         if(key==GLFW.GLFW_KEY_ENTER || key==GLFW.GLFW_KEY_KP_ENTER) { apply();return true; }
         if(hasControlDown() && (key==GLFW.GLFW_KEY_S || key==GLFW.GLFW_KEY_O)) {
-            // Short screens still get the complete file workflow through a dedicated filename dialog.
+
             minecraft.setScreen(new PoseFileScreen(key==GLFW.GLFW_KEY_O,this));return true;
         }
         return super.keyPressed(key,scan,modifiers);

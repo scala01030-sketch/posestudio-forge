@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import studio.pose.client.StudioState;
 
-/** Removing a temporary photo actor is not a death or a ragdoll event. */
+
 @Pseudo
 @Mixin(targets="net.diebuddies.physics.PhysicsMod",remap=false)
 public abstract class PhysicsStudioMixin {

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-/** EMF overrides ModelPart.compile as well as render. Keep its geometry and UV implementation. */
+
 @Pseudo
 @Mixin(targets="traben.entity_model_features.models.parts.EMFModelPart",remap=false)
 public abstract class EmfMeshMixin {

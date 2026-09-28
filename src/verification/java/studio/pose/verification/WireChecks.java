@@ -6,7 +6,7 @@ import studio.pose.data.ActorTransform;
 import studio.pose.network.StudioNetwork;
 import java.util.*;
 
-/** Requires Forge's transformed event bus; avoids split packages between the mod and fixture modules. */
+
 public final class WireChecks {
     public static void verify() throws Exception {
         var encode=StudioNetwork.BatchRequest.class.getDeclaredMethod("encode",StudioNetwork.BatchRequest.class,FriendlyByteBuf.class);encode.setAccessible(true);

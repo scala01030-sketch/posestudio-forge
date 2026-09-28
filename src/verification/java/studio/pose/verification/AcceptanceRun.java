@@ -27,7 +27,7 @@ import net.minecraft.world.item.*;
 import com.mojang.blaze3d.platform.InputConstants;
 import org.lwjgl.glfw.GLFW;
 
-/** Executed in a fresh integrated world. Excluded from the release jar. */
+
 public final class AcceptanceRun {
     private int stage,ticks;
     private long start=System.nanoTime();
@@ -190,8 +190,8 @@ public final class AcceptanceRun {
                 case 13 -> {
                     if(ticks<10) return;
                     check(mc.gameRenderer.getMainCamera().getPosition().distanceTo(new Vec3(0,-63.5,0))<.0001,"Free camera can enter solid blocks without collision");
-                    // Assert restoration before resumed AI, collision and live input can move the player.
-                    // Network exit and equipment restoration are exercised by the other actual-instance runs.
+
+
                     pending=mc.getSingleplayerServer().submit(()-> {
                         var p=mc.getSingleplayerServer().getPlayerList().getPlayers().get(0);FreezeService.end(p.getUUID());
                         if(p.position().distanceTo(original)>.1) throw new AssertionError("Player original transform not restored immediately: original="+original+" current="+p.position());
@@ -360,7 +360,7 @@ public final class AcceptanceRun {
     private String limb(String joint) {return joint.replace("elbow","arm").replace("knee","leg");}
     private double signature(ActorState actor,String channel) {
         Double value=actor.meshSignatures.get(channel);
-        if(value==null && channel.startsWith("flat/")) value=actor.meshSignatures.get(channel.substring(5)); // SkinLayers3D may replace the flat overlay with its voxel mesh.
+        if(value==null && channel.startsWith("flat/")) value=actor.meshSignatures.get(channel.substring(5));
         if(value==null) throw new AssertionError("No actual mesh signature for "+channel+": "+actor.meshSignatures);return value;
     }
     private void press(Minecraft mc,String key) {
@@ -379,7 +379,7 @@ public final class AcceptanceRun {
         StudioScreen screen=(StudioScreen)mc.screen;var c=s.camera;
         double cx=c.x,cy=c.y,cz=c.z,fov=c.fov;float yaw=c.yaw,pitch=c.pitch,roll=c.roll;
         ActorTransform actor=s.actor().transform;
-        // The center near the feet can contain an actor/node with FA+Player enabled; use empty left viewport.
+
         double x=Math.min(152,mc.getWindow().getGuiScaledWidth()/4)+18,y=mc.getWindow().getGuiScaledHeight()-40;
         ((net.minecraft.client.gui.screens.Screen)screen).mouseScrolled(x,y,2);check(c.fov==fov-4,"Viewport wheel zoom");
         double zoomed=c.fov;((net.minecraft.client.gui.screens.Screen)screen).mouseScrolled(10,80,1);check(c.fov==zoomed,"Sidebar wheel does not zoom camera");

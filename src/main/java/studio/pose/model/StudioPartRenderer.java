@@ -6,7 +6,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraftforge.fml.ModList;
 import studio.pose.mixin.ModelPartAccess;
 
-/** Preserve the normal per-part path only for frozen actors when a bulk renderer would bypass it. */
+
 public final class StudioPartRenderer {
     private static final boolean OPTIMIZED=ModList.get().isLoaded("oculus") || ModList.get().isLoaded("embeddium") || ModList.get().isLoaded("rubidium");
     public static boolean render(ModelPart part,PoseStack stack,VertexConsumer vertices,int light,int overlay,float r,float g,float b,float a) {

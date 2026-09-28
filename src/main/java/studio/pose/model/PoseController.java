@@ -17,11 +17,11 @@ public final class PoseController {
     private static final float DEG=(float)(Math.PI/180);
     public static void before(ModelPart p) {
         var binding=RenderContext.binding(p); if(binding==null) return;
-        // An optimizer may cancel an unbound part before our RETURN hook. Never retain state for it.
+
         SAVED.push(new Saved(p,p.x,p.y,p.z,p.xRot,p.yRot,p.zRot,p.xScale,p.yScale,p.zScale));
         ActorState a=RenderContext.current().actor();
         BonePose pose=a.bones.computeIfAbsent(binding.name(),n->{
-            // A newly frozen humanoid starts in its model's rest pose, not a cached weapon animation.
+
             if(RenderContext.current().adapter().humanoid) {
                 var rest=p.getInitialPose();return new BonePose(rest.x,rest.y,rest.z,rest.xRot/DEG,rest.yRot/DEG,rest.zRot/DEG);
             }
@@ -49,7 +49,7 @@ public final class PoseController {
             a.skinTransformErrors.merge(b.name(),error,Math::max);
         }
         Matrix4f partMatrix=new Matrix4f(stack.last().pose()),handleMatrix=partMatrix;
-        // Human head/torso handles sit on the face center and torso center; model pivots stay intact.
+
         if(frame.adapter().humanoid) {
             if(b.name().equals("head")) handleMatrix=new Matrix4f(partMatrix).translate(0,-4f/16,-4f/16);
             else if(b.name().equals("body")) handleMatrix=new Matrix4f(partMatrix).translate(0,6f/16,0);

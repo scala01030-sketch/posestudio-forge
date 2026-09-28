@@ -7,7 +7,7 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import studio.pose.data.ActorTransform;
 import studio.pose.network.StudioNetwork.Entry;
 
-/** Collect the actual main world render submissions, never GUI previews or shader shadows. */
+
 public final class VisibleActors {
     private static final Map<UUID,Entry> building=new LinkedHashMap<>();
     private static List<Entry> completed=List.of();
@@ -26,7 +26,7 @@ public final class VisibleActors {
         var mc=Minecraft.getInstance();
         if(!collecting || studio.pose.model.ShaderPass.shadow() || mc.level==null || mc.player==null
             || e.isRemoved() || mc.level.getEntity(e.getId())!=e || e.isInvisibleTo(mc.player)) return;
-        // EntityCulling cancels inside EntityRenderer, after dispatcher entry. Honor its public flag when installed.
+
         var culling=cullingMethods.computeIfAbsent(e.getClass(),type->{try {return Optional.of(type.getMethod("isCulled"));}catch(NoSuchMethodException ex) {return Optional.empty();}});
         try {if(culling.isPresent() && Boolean.TRUE.equals(culling.get().invoke(e))) return;} catch(ReflectiveOperationException ignored) {}
         var camera=mc.gameRenderer.getMainCamera().getPosition();
@@ -37,7 +37,7 @@ public final class VisibleActors {
         var mc=Minecraft.getInstance();
         if(level!=mc.level || System.nanoTime()-frame>3_000_000_000L) return null;
         var result=new LinkedHashMap<UUID,Entry>();
-        // The photographer's own model is always part of the scene, including first person entry.
+
         if(mc.player!=null) result.put(mc.player.getUUID(),new Entry(mc.player.getUUID(),new ActorTransform(mc.player.getX(),mc.player.getY(),mc.player.getZ(),mc.player.getYRot(),mc.player.getXRot())));
         for(var entry:completed) if(StudioState.INSTANCE.entity(entry.actor())!=null) result.put(entry.actor(),entry);
         return List.copyOf(result.values());

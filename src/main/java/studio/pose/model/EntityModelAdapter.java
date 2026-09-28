@@ -14,7 +14,7 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import studio.pose.mixin.ModelPartAccess;
 import studio.pose.mixin.QuadrupedAccess;
 
-/** Only known model containers are inspected; arbitrary mod object graphs are never traversed. */
+
 public final class EntityModelAdapter {
     public record Binding(String name,String parent,boolean playerLimb) {}
     public final IdentityHashMap<ModelPart,Binding> bindings=new IdentityHashMap<>();
@@ -63,7 +63,7 @@ public final class EntityModelAdapter {
                 if(java.lang.reflect.Modifier.isStatic(f.getModifiers()) || !ModelPart.class.isAssignableFrom(f.getType())) continue;
                 if(!f.trySetAccessible()) continue;
                 ModelPart part=(ModelPart)f.get(model); if(part==null || bindings.containsKey(part)) continue;
-                // Explicit skin layer aliases survive obfuscation and keep sleeves/pants on the same pose.
+
                 String name=partName(part,f.getName()); boolean limb=false;
                 if(model instanceof PlayerModel<?> p) {
                     if(part==p.leftSleeve) { name="left_arm"; limb=true; }
@@ -91,7 +91,7 @@ public final class EntityModelAdapter {
         }
     }
     private static String partName(ModelPart part,String fallback) {
-        // Optional EMF names describe its existing vanilla anchors without depending on SRG field names.
+
         for(Class<?> type=part.getClass();type!=null && type.getName().startsWith("traben.entity_model_features.");type=type.getSuperclass()) {
             try {Field field=type.getDeclaredField("name");if(field.trySetAccessible() && field.get(part) instanceof String name && !name.isBlank()) return name;}
             catch(ReflectiveOperationException | RuntimeException ignored) {}

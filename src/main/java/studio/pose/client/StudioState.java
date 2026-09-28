@@ -80,7 +80,7 @@ public final class StudioState {
         if(r.enter()) {
             if(!requested) {StudioNetwork.send(StudioNetwork.END,empty,zero);return;}
             awaitingEntryProps=true;
-            // Camera was captured on F6. Retain it while the authoritative freeze acknowledgement arrives.
+
             reply(new StudioNetwork.Reply(StudioNetwork.BEGIN,empty,zero,""));
         }
         if(!active) return;
@@ -118,7 +118,7 @@ public final class StudioState {
         if(e==null) return;
         selected=e.getUUID(); actors.computeIfAbsent(selected,id->new ActorState(id,new ActorTransform(e.getX(),e.getY(),e.getZ(),e.getYRot(),e.getXRot())));
         selection.clear();selection.add(selected);
-        // Model discovery is synchronous and must not depend on visibility or a shader render pass.
+
         var adapter=studio.pose.model.RenderContext.inspect(e,actor());
         if(!actor().bones.containsKey(bone) || (!guides && !adapter.player && !actor().editableBones.contains(bone))) {
             bone=adapter.player?"head":actor().editableBones.stream().sorted(java.util.Comparator.comparingInt((String name)->name.toLowerCase(java.util.Locale.ROOT).contains("head")?0:1).thenComparing(name->name)).findFirst().orElse("head");
@@ -168,7 +168,7 @@ public final class StudioState {
             ActorState a=actors.computeIfAbsent(entry.getKey(),id->new ActorState(id,entry.getValue()));
             a.transform=entry.getValue();a.frozen=true;a.renderRequestedNanos=System.nanoTime();pin(a);
             iterator.remove();message=Component.translatable("posestudio.status.placed");
-            // Publish the completed actor state before selection rebuilds the property panel.
+
             select(e);
         }
         for(ActorState a:actors.values()) if(a.frozen) pin(a);

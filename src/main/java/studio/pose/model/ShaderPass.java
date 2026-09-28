@@ -2,7 +2,7 @@ package studio.pose.model;
 
 import java.lang.reflect.Method;
 
-/** Optional public Iris/Oculus API; no shader mod is required by the release. */
+
 public final class ShaderPass {
     private static final Object API;
     private static final Method SHADOW;

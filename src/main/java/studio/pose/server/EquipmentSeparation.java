@@ -8,7 +8,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import studio.pose.data.ActorTransform;
 
-/** Temporary display copies; original stacks stay in a recoverable equipment snapshot. */
+
 final class EquipmentSeparation {
     private static final String RECOVERY="posestudio:equipment";
     final LivingEntity actor;
@@ -43,7 +43,7 @@ final class EquipmentSeparation {
         sync(actor);
     }
     private static void sync(LivingEntity actor) {
-        // Frozen non-player entities do not run LivingEntity's normal equipment-diff tick.
+
         if(actor.level() instanceof net.minecraft.server.level.ServerLevel level) {
             var equipment=List.of(com.mojang.datafixers.util.Pair.of(EquipmentSlot.MAINHAND,actor.getMainHandItem().copy()),com.mojang.datafixers.util.Pair.of(EquipmentSlot.OFFHAND,actor.getOffhandItem().copy()));
             level.getChunkSource().broadcastAndSend(actor,new net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket(actor.getId(),equipment));
@@ -53,7 +53,7 @@ final class EquipmentSeparation {
     private static void restoreSlot(LivingEntity actor,EquipmentSlot slot,ItemStack stack,int index) {
         if(stack.isEmpty()) return;
         if(actor instanceof Player p) {
-            // Restore the original hotbar index even if an external mod changed the selected slot.
+
             if(index<0 || index>=p.getInventory().getContainerSize()) return;
             if(p.getInventory().getItem(index).isEmpty()) p.getInventory().setItem(index,stack);
             else if(!p.getInventory().add(stack) && !stack.isEmpty()) p.drop(stack,false);

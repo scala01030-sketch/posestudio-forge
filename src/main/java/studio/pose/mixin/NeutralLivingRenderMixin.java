@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import studio.pose.model.RenderContext;
 
-/** Prevent native swimming/crawl/flight root transforms from tilting the neutral Studio actor. */
+
 @Mixin(LivingEntity.class)
 public abstract class NeutralLivingRenderMixin {
     @Inject(method="getSwimAmount",at=@At("HEAD"),cancellable=true)

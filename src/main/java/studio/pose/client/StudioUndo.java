@@ -5,7 +5,7 @@ import java.util.Map;
 import studio.pose.data.BonePose;
 import net.minecraft.network.chat.Component;
 
-/** Ten completed adjustments. A mouse gesture is remembered only at its first change. */
+
 public final class StudioUndo {
     public static final int LIMIT=10;
     private final java.util.Deque<Runnable> history=new java.util.ArrayDeque<>();

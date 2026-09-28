@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$VersionJson,[Parameter(Mandatory=$true)][string]$MinecraftRoot,[ValidateSet('en_us','zh_cn')][string]$Language='en_us',[string]$CompatibilityInstance,[string]$ModVersion='0.1.10',[switch]$FullPack,[ValidateSet('default','slim')][string]$Skin='default',[switch]$ExactSettings,[switch]$InPlace,[string]$EvidencePath,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest,[switch]$PlacementTest)
+param([Parameter(Mandatory=$true)][string]$VersionJson,[Parameter(Mandatory=$true)][string]$MinecraftRoot,[ValidateSet('en_us','zh_cn')][string]$Language='en_us',[string]$CompatibilityInstance,[string]$ModVersion='0.1.11',[switch]$FullPack,[ValidateSet('default','slim')][string]$Skin='default',[switch]$ExactSettings,[switch]$InPlace,[string]$EvidencePath,[switch]$Diverse,[switch]$EntryTest,[switch]$Usability,[switch]$FinalTest,[switch]$ItemsTest,[switch]$PlacementTest)
 $ErrorActionPreference='Stop'
 $projectRoot=Split-Path -Parent $PSScriptRoot
 $runRoot=Join-Path $projectRoot ('build\production-run-'+$ModVersion+'-'+$Language)
@@ -108,7 +108,6 @@ $argFile=Join-Path $runRoot 'launch.args'
 $quoted=foreach($arg in $launchArguments) { '"'+$arg.Replace('\','/').Replace('"','\"')+'"' }
 [IO.File]::WriteAllLines($argFile,$quoted,[Text.UTF8Encoding]::new($false))
 if($CompatibilityInstance -and !$InPlace) {
-    # Reproduce only the installed rendering stack, in a separate fresh world.
     Get-ChildItem -LiteralPath (Join-Path $CompatibilityInstance 'mods') -Filter '*.jar' | Where-Object {($_.Name -notmatch '^posestudio-') -and ($FullPack -or $_.Name -match '^(embeddium|oculus)|entityculling|entity_model_features|entity_texture_features|skinlayers3d')} | Copy-Item -Destination (Join-Path $runRoot 'mods') -Force
     $configRoot=Join-Path $runRoot 'config';New-Item -ItemType Directory -Force $configRoot | Out-Null
     foreach($name in @('entityculling.json','oculus.properties')) {

@@ -3,14 +3,14 @@ package studio.pose.mesh;
 import org.joml.*;
 import java.lang.Math;
 
-/** A piecewise straight / constant-curvature sweep. Shared cross-sections make the joint watertight. */
+
 public final class BendMath {
     private final Quaternionf end;
     private final float start,width;
     private static final int STEPS=96;
     private final Vector3f[] centers=new Vector3f[STEPS+1];
     public BendMath(double[] degrees,float joint,float width) {
-        // Explicit Euler turns are retained instead of quaternion shortest-path interpolation.
+
         this.angles=new Vector3f((float)Math.toRadians(degrees[0]),(float)Math.toRadians(degrees[1]),(float)Math.toRadians(degrees[2]));
         this.start=joint-width/2;this.width=width;
         end=rotation(1);

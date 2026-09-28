@@ -5,7 +5,7 @@ import net.minecraft.client.model.geom.*;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.resources.ResourceLocation;
 
-/** Independent mod renderer with a named hierarchy and continuously written idle animation. */
+
 public final class FixtureRenderer extends MobRenderer<Fixtures.FixturePig,FixtureRenderer.FixtureModel> {
     public FixtureRenderer(EntityRendererProvider.Context context) { super(context,new FixtureModel(context.bakeLayer(ModelLayers.PIG)),.6f); }
     @Override public ResourceLocation getTextureLocation(Fixtures.FixturePig entity) { return new ResourceLocation("minecraft","textures/entity/pig/pig.png"); }

@@ -17,7 +17,7 @@ public abstract class KeyboardHandlerMixin {
         if(window!=mc.getWindow().getWindow() || (mc.screen!=null && !(mc.screen instanceof StudioScreen))) return;
         if(action==GLFW.GLFW_REPEAT && (StudioKeys.mapped(key,scan) || (key==GLFW.GLFW_KEY_ESCAPE && studio.pose.client.StudioState.INSTANCE.active))) {ci.cancel();return;}
         if(action!=GLFW.GLFW_PRESS) return;
-        // Handle once, before GUI/gameplay dispatch; do not queue the same click for the next tick.
+
         if(StudioKeys.press(key,scan)) ci.cancel();
     }
 }

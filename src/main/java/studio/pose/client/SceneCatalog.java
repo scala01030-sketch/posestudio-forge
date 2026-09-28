@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import studio.pose.data.PlacementSpec;
 
-/** Read native registries and creative stack variants once per opening, never once per keystroke. */
+
 public final class SceneCatalog {
     private static final org.slf4j.Logger LOGGER=com.mojang.logging.LogUtils.getLogger();
     public record Entry(PlacementSpec source,Component label,String detail,String search) {

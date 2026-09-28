@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import studio.pose.PoseStudio;
 import studio.pose.data.ActorTransform;
 
-/** Server thread only. Every lock has an owner and an exact restoration snapshot. */
+
 @Mod.EventBusSubscriber(modid=PoseStudio.ID)
 public final class FreezeService {
     private static final Map<UUID, Lock> LOCKS = new HashMap<>();
@@ -227,7 +227,7 @@ public final class FreezeService {
     }
     @SubscribeEvent public static void loaded(net.minecraftforge.event.entity.EntityJoinLevelEvent event) {
         if(!event.getLevel().isClientSide && event.getEntity() instanceof LivingEntity living && !frozen(living)) EquipmentSeparation.recover(living);
-        // A crash can save a temporary actor before logout cleanup. Do not keep that orphan on reload.
+
         if(!event.getLevel().isClientSide && event.getEntity().getTags().contains("posestudio:temporary_actor")
             && !LOCKS.containsKey(event.getEntity().getUUID())) event.setCanceled(true);
     }

@@ -2,7 +2,7 @@ package studio.pose.camera;
 
 import studio.pose.client.StudioState;
 
-/** Perspective presets relative to the actor's facing direction; world rendering is unchanged. */
+
 public final class StudioViews {
     private StudioViews() {}
     public static void focus(int side) {

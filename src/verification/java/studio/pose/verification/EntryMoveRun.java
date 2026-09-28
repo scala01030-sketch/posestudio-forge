@@ -20,7 +20,7 @@ import studio.pose.server.FreezeService;
 import studio.pose.overlay.StudioOverlay;
 import studio.pose.ui.StudioScreen;
 
-/** Real main-frame entry collection, atomic server admission and mouse group translation. */
+
 public final class EntryMoveRun {
     private int stage,ticks;
     private final long start=System.nanoTime();

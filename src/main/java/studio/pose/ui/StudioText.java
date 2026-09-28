@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 
-/** Display translations never change the stable identifiers used in pose files. */
+
 public final class StudioText {
     public static boolean internalBone(String path) {
         return Arrays.stream(path.split("/")).anyMatch(n->n.startsWith("EMF_") || n.startsWith("emf$"));

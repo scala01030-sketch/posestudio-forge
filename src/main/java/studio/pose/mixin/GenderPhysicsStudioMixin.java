@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import studio.pose.client.StudioState;
 
-/** Freeze the optional layer's existing simulation without changing its configuration. */
+
 @Pseudo
 @Mixin(targets="com.wildfire.physics.BreastPhysics",remap=false)
 public abstract class GenderPhysicsStudioMixin {
