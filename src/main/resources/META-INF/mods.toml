@@ -3,7 +3,7 @@ loaderVersion="[47,48)"
 license="MIT"
 [[mods]]
 modId="posestudio"
-version="0.1.10"
+version="${version}"
 displayName="Pose Studio"
 authors="Pose Studio contributors"
 description='''Static in-world pose editing, continuous player joints and a detached camera. No animation timeline.'''

@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'net.minecraftforge.gradle' version '6.0.54'
 }
-version = '0.1.11'
+version = '0.1.12'
 group = 'studio.pose'
 base { archivesName = 'posestudio' }
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -49,6 +49,12 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+tasks.named('processResources', ProcessResources) {
+    inputs.property 'modVersion', project.version.toString()
+    filesMatching('META-INF/mods.toml') {
+        expand(version: project.version.toString())
+    }
+}
 tasks.named('compileJava', JavaCompile) {
     dependsOn 'createMcpToSrg'
     options.compilerArgs += ["-AreobfTsrgFile=${layout.buildDirectory.get()}/createMcpToSrg/output.tsrg".toString(),
